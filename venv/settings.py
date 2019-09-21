@@ -8,6 +8,9 @@ class Settings():
         self.screen_height = 800
         self.bg_color = (230, 230, 230)
 
+        # Ship settings
+        self.ship_speed_factor = 1.5
+
     def get_display(self):
         return self.screen_width, self.screen_height
 
