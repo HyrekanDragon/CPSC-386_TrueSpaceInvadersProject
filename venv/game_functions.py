@@ -44,7 +44,7 @@ def update_screen(settings, screen, ship, aliens, bullets):
     # Make the most recently drawn screen visible.
     pygame.display.flip()
 
-def update_bullet(bullets):
+def update_bullet(settings, screen, ship, aliens, bullets):
     """Update position of bullets and get rid of old bullets"""
     # Update bullet positions.
     bullets.update()
@@ -53,6 +53,18 @@ def update_bullet(bullets):
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
+
+    check_bullet_alien_collisions(settings, screen, ship, aliens, bullets)
+
+def check_bullet_alien_collisions(settings, screen, ship, aliens,  bullets):
+    """Respond to bullet-alien collisions"""
+    # Remove any bullets and aliens that have colided
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+
+    if len(aliens) == 0:
+        # Destroy existng bullets and create new fleet
+        bullets.empty()
+        create_fleet(settings, screen, ship, aliens)
 
 def fire_bullet(settings, screen, ship, bullets):
     """Fire a bullet if limit not reached yet"""
@@ -95,3 +107,23 @@ def create_fleet(settings, screen, ship, aliens):
         for alien_number in range(number_aliens_x):
             create_alien(settings, screen, aliens, alien_number, row_number)
 
+def check_fleet_edges(settings, aliens):
+    """Respond appropriately if any aliens have reached an edge."""
+    for alien in aliens.sprites():
+        if alien.check_edges():
+            change_fleet_direction(settings, aliens)
+            break
+
+def change_fleet_direction(settings, aliens):
+    """Drop the entire fleet and change the fleet's direction."""
+    for alien in aliens.sprites():
+        alien.rect.y += settings.fleet_drop_speed
+    settings.fleet_direction *= -1
+
+def update_aliens(settings, aliens):
+    """
+        Check if the fleet is at an edge,
+        Update the positions of all aliens in the fleet.
+    """
+    check_fleet_edges(settings, aliens)
+    aliens.update()
