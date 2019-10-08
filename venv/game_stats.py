@@ -11,6 +11,7 @@ class GameStats():
 
         # Star Alien Invasion is an active state.
         self.game_active = False
+        self.show_highscore = False
 
     def reset_stats(self):
         """Intialilze stats that can change during the game."""
