@@ -160,6 +160,10 @@ def check_bullet_alien_collisions(settings, screen, stats, sb, ship, aliens, ufo
         stats.level += 1
         sb.prep_level()
 
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load('music/Space Invaders - Do The Freak.mid')
+        pygame.mixer.music.play(-1, 0.0)
+
         create_fleet(settings, screen, ship, aliens, ufos)
 
 def fire_bullet(settings, screen, ship, bullets):
